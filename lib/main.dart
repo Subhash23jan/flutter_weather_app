@@ -55,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
       color: const Color.fromARGB(233, 9, 8, 8),
       fontSize: 16);
   WeatherData? weather;
+  bool notLoaded=false;
   DateFormat timeFormat = DateFormat('HH:mm a');
 
   @override
@@ -62,6 +63,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     print(widget.longitude);
     getWeatherData();
+    Timer(Duration(seconds: 10),() {
+      setState(() {
+        notLoaded=true;
+      });
+    },);
   }
 
   @override
@@ -69,7 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         backgroundColor: Colors.black,
         body: weather == null
-            ? const Stack(
+            ? notLoaded?const Center(child: Text("Check Your Internet Connection",style: TextStyle(color: Colors.white),),):
+        const Stack(
                 alignment: Alignment.center,
                 children: [
                   Center(
@@ -501,5 +508,9 @@ class _MyHomePageState extends State<MyHomePage> {
         index = 3;
       });
     }
+  }
+
+  showSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Check your Internet Connection")));
   }
 }
